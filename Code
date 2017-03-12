@@ -53,6 +53,7 @@ void loop() {
   digitalWrite(ledping, LOW); //both off if not red or blue
   digitalWrite(ledpinr, LOW);
   delay (5000);
+  loop();
   }
  delay(1);
  }
