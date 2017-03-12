@@ -1,0 +1,58 @@
+#include <Servo.h>
+
+Servo servol;
+Servo servor;
+int ledpinr = 11;       // put red led to pin 11
+int ledping = 10;       // put blue led to pin 10
+                        // going from memory so please check this is correct. Thanks!
+
+void setup() {
+
+  servor.attach(2);     //servos not used at all
+  servol.attach(3);
+  Serial.begin(9600);
+
+  pinMode(ledpinr, OUTPUT); 
+  pinMode(ledping, OUTPUT);
+  
+}
+
+void loop() {
+  
+ float L1, L2, L3, r1, r2, r3;
+ float rm = 740, bm = 650; //min values for red & blue
+ float rx = 800, bx = 680; //max values
+                           //might need adjusting for light levels. Blue could over lap black
+ 
+ L3 = analogRead(0);
+ L2 = analogRead(1);
+ L1 = analogRead(2);
+ r1 = analogRead(3);
+ r2 = analogRead(4);
+ r3 = analogRead(5);
+
+ if (r1 > rm && rx > r1 || r2 > rm && rx > r2 || r3 > rm && rx > r3 || L1 > rm && rx > L1 || L2 > rm && rx > L2 || L3 > rm && rx > L3){
+  digitalWrite(ledpinr, HIGH);  //Red led on
+  digitalWrite(ledping, LOW);   //i didnt have this line when i had it working but shouldnt cause an issue. Remove if it does
+  delay (5000);                 //may need increasing to make it look better/stop it blinking etc Should be 5 seconds
+  digitalWrite(ledping, LOW);   //resets both back to off
+  digitalWrite(ledpinr, LOW); 
+  loop();
+  }
+    
+ else if (r1 > bm && bx > r1 || r2 > bm && bx > r2 || r3 > bm && bx > r3 || L1 > bm && bx > L1 || L2 > bm && bx > L2 || L3 > bm && bx > L3){
+  digitalWrite(ledping, HIGH);
+  digitalWrite(ledpinr, LOW);
+  delay (5000);
+  digitalWrite(ledping, LOW);
+  digitalWrite(ledpinr, LOW);
+  loop();
+  }
+
+ else {
+  digitalWrite(ledping, LOW); //both off if not red or blue
+  digitalWrite(ledpinr, LOW);
+  delay (5000);
+  }
+ delay(1);
+ }
